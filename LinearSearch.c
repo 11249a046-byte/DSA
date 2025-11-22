@@ -29,74 +29,44 @@ user-entered elements to find a specified target number.
 =====================================================================
 */
 
-int linear_search(int arr[], int n, int target) {
-    for (int i = 0; i < n; i++) {
-        if (arr[i] == target)
-            return i;
-    }
-    return -1;
-}
+#include<stdio.h>
 
-int main() {
-    int n, target;
-    printf("Linear Search Program\n");
-    printf("Enter how many numbers you want to store: ");
+int main()
+{
+    int n, key, i, found = 0;
+
+    // Ask user how many elements they want to store
+    printf("enter how many elements do you want to store:\n");
     scanf("%d", &n);
 
-    int arr[n];
-    printf("Enter your numbers one by one:\n");
-    for (int i = 0; i < n; i++) {
-        printf("Number %d: ", i + 1);
-        scanf("%d", &arr[i]);
+    // Declare an array of size n
+    int a[n];
+
+    // Input n elements from the user
+    printf("\n enter the %d elements:\n", n);
+    for(i = 0; i < n; i++)
+    {
+        scanf("%d", &a[i]);   // storing each value in array
     }
 
-    printf("Enter the number you want to search for: ");
-    scanf("%d", &target);
+    // Ask user for the key value to search
+    printf("\n enter the key value to search:\n");
+    scanf("%d", &key);
 
-    int result = linear_search(arr, n, target);
+    // Linear search: check each element one by one
+    for(i = 0; i < n; i++)
+    {
+        if(key == a[i])       // if element matches key
+        {
+            printf("\nkey found at index %d\n", i);
+            found = 1;        // set flag to show key is found
+        }
+    }
 
-    if (result != -1)
-        printf("\n%d is found at position %d.\n", target, result + 1);
-    else
-        printf("\n%d is not found in the list.\n", target);
-
-    printf("Thank you for using the program.\n");
-    return 0;
+    // If key not found in entire array
+    if(found == 0)
+    {
+        printf("\nkey not found");
+    }
 }
 
-/*
-=====================================================================
-                            OUTPUT
-=====================================================================
-
-Output 1:
------------
-Linear Search Program
-Enter how many numbers you want to store: 5
-Enter your numbers one by one:
-Number 1: 10
-Number 2: 20
-Number 3: 30
-Number 4: 40
-Number 5: 50
-Enter the number you want to search for: 30
-
-30 is found at position 3.
-Thank you for using the program.
-
-
-Output 2:
------------
-Linear Search Program
-Enter how many numbers you want to store: 4
-Enter your numbers one by one:
-Number 1: 5
-Number 2: 15
-Number 3: 25
-Number 4: 35
-Enter the number you want to search for: 20
-
-20 is not found in the list.
-Thank you for using the program.
-=====================================================================
-*/
