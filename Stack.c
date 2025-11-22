@@ -1,5 +1,3 @@
-#include <stdio.h>
-#define MAX 100
 
 /*
 ===========================================================
@@ -32,120 +30,83 @@ PUSH, POP, PEEK, and checking if the stack is empty using arrays.
                         PROGRAM
 ===========================================================
 */
+#include<stdio.h>
+#include<string.h>
 
-int stack[MAX];
-int top = -1;
+int main()
+{
+    int n, max, choice, items;
 
-void push(int x) {
-    if (top >= MAX - 1) {
-        printf("Stack Overflow\n");
-    } else {
-        top++;
-        stack[top] = x;
-        printf("%d pushed into stack.\n", x);
-    }
-}
+    // Ask user for size of the stack
+    printf("enter the size of stack:\n");
+    scanf("%d", &n);
 
-int pop() {
-    if (top < 0) {
-        printf("Stack Underflow\n");
-        return -1;
-    } else {
-        int value = stack[top];
-        top--;
-        printf("%d popped from stack.\n", value);
-        return value;
-    }
-}
+    int stack[n];      // stack of size n
+    max = n - 1;       // maximum allowed index
+    int top = -1;      // stack initially empty
 
-int peek() {
-    if (top < 0) {
-        printf("Stack is empty\n");
-        return -1;
-    } else {
-        printf("Top element is %d\n", stack[top]);
-        return stack[top];
-    }
-}
+    char op[5];        // to store yes/no option for repeating
 
-int isEmpty() {
-    return top == -1;
-}
-
-int main() {
-    int choice, value;
-
-    printf("Stack Operations using Array\n");
-    printf("-----------------------------\n");
-
-    do {
-        printf("\n1. Push\n2. Pop\n3. Peek\n4. Check Empty\n5. Exit\n");
-        printf("Enter your choice: ");
+    do
+    {
+        // Show menu to user
+        printf("\n 1. push\n 2. pop\n 3. exit\n");
+        printf("\n choose the operation to be done:\n");
         scanf("%d", &choice);
 
-        switch (choice) {
-            case 1:
-                printf("Enter value to push: ");
-                scanf("%d", &value);
-                push(value);
-                break;
-            case 2:
-                pop();
-                break;
-            case 3:
-                peek();
-                break;
-            case 4:
-                if (isEmpty())
-                    printf("Stack is empty.\n");
+        // Perform selected operation
+        switch(choice)
+        {
+            case 1: // PUSH operation
+            {
+                // Check overflow (stack full)
+                if(top == max - 1)
+                {
+                    printf("\n stack is overflow");
+                }
                 else
-                    printf("Stack is not empty.\n");
+                {
+                    top++;   // move top to next position
+                    printf("\n enter the element to be push:\n");
+                    scanf("%d", &stack[top]);   // insert element
+                    printf("\n entered element: %d\n top value: %d\n", stack[top], top);
+                }
                 break;
-            case 5:
-                printf("Exiting program...\n");
-                break;
-            default:
-                printf("Invalid choice! Please try again.\n");
-        }
-    } while (choice != 5);
+            }
 
-    return 0;
+            case 2: // POP operation
+            {
+                // Check underflow (stack empty)
+                if(top == -1)
+                {
+                    printf("\n stack is underflow\n");
+                }
+                else
+                {
+                    items = stack[top];  // get the top element
+                    top--;               // decrease top
+                    printf("\n items %d has been poped out of stack\n top value is %d ", items, top);
+                }
+                break;
+            }
+
+            case 3: // EXIT program
+            {
+                printf("\n exiting of stack");
+                return 0;
+            }
+
+            default: // invalid menu option
+            {
+                printf("invalid operation");
+            }   
+        }
+
+        // Ask if the user wants to continue
+        printf("\n enter your choice to repeat yes or no:\n");
+        scanf("%s", op);
+
+    }
+    while(strcmp(op, "no"));   // repeat until user enters 'no'
 }
 
-/*
-===========================================================
-                        OUTPUT
-===========================================================
-
-Example Run:
--------------
-Stack Operations using Array
------------------------------
-
-1. Push
-2. Pop
-3. Peek
-4. Check Empty
-5. Exit
-Enter your choice: 1
-Enter value to push: 10
-10 pushed into stack.
-
-Enter your choice: 1
-Enter value to push: 20
-20 pushed into stack.
-
-Enter your choice: 3
-Top element is 20
-
-Enter your choice: 2
-20 popped from stack.
-
-Enter your choice: 4
-Stack is not empty.
-
-Enter your choice: 5
-Exiting program...
-
-===========================================================
-*/
