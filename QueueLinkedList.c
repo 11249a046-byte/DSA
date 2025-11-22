@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 /*
 ===========================================================
                         AIM
@@ -39,143 +36,133 @@ and Display the queue elements along with their addresses.
                         PROGRAM
 ===========================================================
 */
+#include <stdio.h>
+#include <stdlib.h>
 
+// Structure defining a single node of the queue
 struct Node {
-    int data;
-    struct Node *next;
+    int data;              // To store data
+    struct Node *next;     // Pointer to next node
 };
 
-struct Node *front = NULL;
-struct Node *rear = NULL;
-
 // Function to create a new node
-struct Node *CreateNode(int data) {
-    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+struct Node* CreateNode(int data) {
+    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+
+    // Check if memory allocation failed
     if (!newNode) {
         printf("Memory allocation failed!\n");
         return NULL;
     }
-    newNode->data = data;
-    newNode->next = NULL;
+
+    newNode->data = data;   // Store the value
+    newNode->next = NULL;   // New node's next is NULL
     return newNode;
 }
 
-// Function to insert element into the queue (Enqueue)
-void Enqueue(int data) {
-    struct Node *newNode = CreateNode(data);
-    if (rear == NULL) {
-        front = rear = newNode;
+// Function to insert an element (ENQUEUE)
+void Enqueue(struct Node **front, struct Node **rear, int data) {
+    struct Node *newNode = CreateNode(data);  // Create new node
+
+    // If queue is empty (front and rear both are NULL)
+    if (*rear == NULL) {
+        *front = *rear = newNode;  // Both front and rear point to new node
     } else {
-        rear->next = newNode;
-        rear = newNode;
+        (*rear)->next = newNode;   // Link new node at the end
+        *rear = newNode;           // Move rear to new node
     }
-    printf("Node with data %d enqueued successfully.\n", data);
+
+    printf("Enqueued %d successfully.\n", data);
 }
 
-// Function to delete element from queue (Dequeue)
-void Dequeue() {
-    if (front == NULL) {
-        printf("Queue is empty, deletion cannot be performed.\n");
+// Function to remove an element (DEQUEUE)
+void Dequeue(struct Node **front, struct Node **rear) {
+    // If queue is empty
+    if (*front == NULL) {
+        printf("Queue is empty! Dequeue not possible.\n");
         return;
     }
-    struct Node *temp = front;
-    printf("Node with data %d dequeued successfully.\n", temp->data);
-    front = front->next;
 
-    if (front == NULL)
-        rear = NULL;
+    struct Node *temp = *front;   // Store front node in temp
+    printf("Dequeued %d.\n", temp->data);
 
-    free(temp);
+    *front = (*front)->next;      // Move front to next node
+
+    // If queue becomes empty after dequeue
+    if (*front == NULL)
+        *rear = NULL;             // Rear should also become NULL
+
+    free(temp);                   // Free removed node
 }
 
-// Function to display all nodes in the queue
-void DisplayQueue() {
+// Function to show the front element
+void Peek(struct Node *front) {
+    if (front == NULL) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Front element = %d\n", front->data);
+    }
+}
+
+// Function to display the entire queue
+void Display(struct Node *front) {
     if (front == NULL) {
         printf("Queue is empty.\n");
         return;
     }
 
     struct Node *temp = front;
-    printf("\nQueue Nodes:\n");
-    while (temp != NULL) {
-        printf("| Address=%p | Data=%d | Next=%p |\n", temp, temp->data, temp->next);
+
+    printf("\nQueue (Front to Rear):\n");
+    while (temp != NULL) {            // Traverse till NULL
+        printf("|%d| -> ", temp->data);
         temp = temp->next;
     }
+    printf("NULL\n");
 }
 
 int main() {
+    struct Node *front = NULL;   // Initially queue is empty
+    struct Node *rear = NULL;
     int choice, data;
 
     while (1) {
-        printf("\n--- Queue Using Linked List ---\n");
-        printf("1. Enqueue (Insert)\n");
-        printf("2. Dequeue (Delete)\n");
-        printf("3. Display Queue\n");
-        printf("4. Exit\n");
+        printf("\n--- Queue Using Singly Linked List ---\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Peek (Front Element)\n");
+        printf("4. Display Queue\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:
-                printf("Enter data to enqueue: ");
-                scanf("%d", &data);
-                Enqueue(data);
-                break;
-            case 2:
-                Dequeue();
-                break;
-            case 3:
-                DisplayQueue();
-                break;
-            case 4:
-                printf("Exiting...\n");
-                exit(0);
-            default:
-                printf("Invalid choice! Try again.\n");
+        case 1:
+            printf("Enter value to enqueue: ");
+            scanf("%d", &data);
+            Enqueue(&front, &rear, data);
+            break;
+
+        case 2:
+            Dequeue(&front, &rear);
+            break;
+
+        case 3:
+            Peek(front);
+            break;
+
+        case 4:
+            Display(front);
+            break;
+
+        case 5:
+            printf("Exiting...\n");
+            exit(0);
+
+        default:
+            printf("Invalid choice! Try again.\n");
         }
     }
 
     return 0;
 }
-
-/*
-===========================================================
-                        OUTPUT
-===========================================================
-
---- Queue Using Linked List ---
-1. Enqueue (Insert)
-2. Dequeue (Delete)
-3. Display Queue
-4. Exit
-Enter your choice: 1
-Enter data to enqueue: 10
-Node with data 10 enqueued successfully.
-
-Enter your choice: 1
-Enter data to enqueue: 20
-Node with data 20 enqueued successfully.
-
-Enter your choice: 1
-Enter data to enqueue: 30
-Node with data 30 enqueued successfully.
-
-Enter your choice: 3
-Queue Nodes:
-| Address=0x5622b4a02b70 | Data=10 | Next=0x5622b4a02b90 |
-| Address=0x5622b4a02b90 | Data=20 | Next=0x5622b4a02bb0 |
-| Address=0x5622b4a02bb0 | Data=30 | Next=(nil) |
-
-Enter your choice: 2
-Node with data 10 dequeued successfully.
-
-Enter your choice: 3
-Queue Nodes:
-| Address=0x5622b4a02b90 | Data=20 | Next=0x5622b4a02bb0 |
-| Address=0x5622b4a02bb0 | Data=30 | Next=(nil) |
-
-Enter your choice: 4
-Exiting...
-
-===========================================================
-*/
